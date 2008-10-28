@@ -1,0 +1,11 @@
+
+	table {
+		border-collapse: 	collapse;
+		width: 				100%;
+	}
+	
+	table tr {
+		text-align: 		left;
+		padding:			2px;
+		border-bottom:		1px solid #ddd;
+	}

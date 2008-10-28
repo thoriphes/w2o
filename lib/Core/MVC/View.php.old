@@ -1,0 +1,99 @@
+<?php
+
+	class View implements Decorated 
+	{
+		const DEFAULT_CONTENT = "text/html";
+		
+		protected $decorators = array();
+		
+		protected 
+			$lang 		= "es",
+			$css 		= array(),
+			$js 		= array(),
+			$encoding 	= W2O::DEFAULT_ENCODING,
+			$doctype 	= W2O::DEFAULT_DOCTYPE,
+			$content	= self::DEFAULT_CONTENT,
+			$title,
+			$description,
+			$file;
+			
+		public function __construct()
+		{
+			$this->addDecorator("getXHTML", new TagWrapper("body"));
+			$this->addDecorator("getXHTML", new HeadAdder(array(
+				'lang' 			=> $this->lang,
+				'title'	 		=> $this->title,
+				'css'			=> $this->css,
+				'js'			=> $this->js,
+				'description'	=> $this->description,
+				'encoding'		=> $this->encoding
+			)));
+			$this->addDecorator("getXHTML", new TagWrapperHTML($this->lang));
+			$this->addDecorator("getXHTML", new WEBFormatterDoctype($this->doctype));
+		}
+		
+		public function addCSS($css)
+		{
+			$this->css[] = $css;
+			$this->addDecorator("getXHTML", new HeadAdder(array(
+				'lang' 			=> $this->lang,
+				'title'	 		=> $this->title,
+				'css'			=> $this->css,
+				'js'			=> $this->js,
+				'description'	=> $this->description,
+				'encoding'		=> $this->encoding
+			)));		}
+		
+		public function addJS($js)
+		{
+			$this->js[] = $js;
+		}
+		
+		public function setTitle($title)
+		{
+			$this->title = $title;
+		}
+		
+		public function setLang($lang)
+		{
+			$this->lang = $lang;
+		}
+		
+		public function setFile($file)
+		{
+			$viewsPath = realpath(str_replace('/', DIRECTORY_SEPARATOR, dirname(__FILE__) . "/../../../app/views/") . $file);
+			$this->file = $viewsPath;
+		}
+		
+		public function setDescription($description)
+		{
+			$this->description = $description;
+		}
+		
+		public function getXHTML()
+		{
+			$output = `php $this->file`;
+			return $this->fireEvent("getXHTML", &$output);
+		}
+		
+		public function fireEvent($event, $data = null)
+		{
+			$result = $data;
+			foreach ($this->decorators[$event] as $decorator)
+				$result = $decorator->run(&$result);
+			return $result;			
+		}
+		
+		public function addDecorator($event, Decorator $decorator)
+		{
+			$this->decorators[$event][$decorator->getId()] = $decorator;
+		}
+		
+		public function removeDecorator($event, Decorator $decorator) {
+			if(isset($this->decorators[$event][$decorator->getId()]))
+				unset($this->decorators[$event][$decorator->getId()]);
+		}
+		
+	}
+	
+?>

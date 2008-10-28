@@ -1,0 +1,22 @@
+
+	body {
+		font-family: 	"Lucida Grande";
+		background: 	#eee;
+	}
+	
+	#wrapper {
+		width:			700px;
+		margin:			0 auto;
+		background: 	white;
+		font-size: 		80%;
+		color: 			#333;
+	}
+	
+	#leftMenu {
+		float:			left;
+		width:			150px;
+	}
+	
+	#content {
+		margin-left: 	150px;
+	}
