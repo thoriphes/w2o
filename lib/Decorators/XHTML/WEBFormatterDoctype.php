@@ -13,7 +13,7 @@
 			));
 		}
 		
-		public function generateData()
+		public function generateData($data = null)
 		{
 			return DocType::getXHTML($this->params['doctype']) . "\n";
 		}

@@ -33,14 +33,14 @@
 			$this->tagName = $tagName;
 		}
 		
-		public function generateData()
+		public function generateData($data = null)
 		{
 			$properties = "";
 			if(is_array($this->params)) foreach($this->params as $key => $value)
 			{
-				$properties .= " $key='$value'";
+				$properties .= " $key='".str_replace("'", "&apos;", $value)."'";
 			}
-			return "<".strtolower($this->tagName).$properties.">\n";
+			return str_replace(Decorator::DATA_MARKER, $data, "\n<".strtolower($this->tagName).$properties.">\n");
 		}
 		
 		public function setParams(array $params)

@@ -2,9 +2,9 @@
 
 	class RemoveBreaks extends Decorator 
 	{
-		public function run($data = null)
+		public function run(&$data = null)
 		{
-			return str_replace("\n", "", $data);
+			str_replace("\n", "", $data);
 		}
 	}
 

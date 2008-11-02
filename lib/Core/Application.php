@@ -5,68 +5,35 @@
 		const DEFAULT_LAYOUT = "main.tpl";
 		
 		static
-			$controller,
-			$model,
-			$view,
 			$layouts = array(),
-			$defaultLayout = self::DEFAULT_LAYOUT,
 			$css = array(),
 			$viewDecorators = array(),
-			$dataManager;
+			$dataManager,
+			$currentController,
+			$currentAction;
 			
 		public static function init()
 		{
 			self::bootstrap();
-			self::registerRoute();
+			self::runController(Router::getRoute(), Router::getAction(), Router::getParams());
 		}
 			
-		public static function registerModel($model)
+		public static function runController($controller, $action, $params = null)
 		{
-			self::$model = new Model($model);
-			$path = realpath(str_replace("/", DIRECTORY_SEPARATOR, dirname(__FILE__) . "/../../app/models/$model.php"));
-			$className = ucwords($model) . "Model";
-			if(is_file($path))
-			{
-				require_once($path);
-				self::$model = new $className($model);
-			}
-		}
-		
-		public static function registerView($view, $action)
-		{
-			$path = realpath(str_replace("/", DIRECTORY_SEPARATOR, dirname(__FILE__) . "/../../app/views/$view/$action.tpl"));
+			self::$currentController 	= $controller;
+			self::$currentAction		= $action;
 			
-			self::$view = new View($view);
-			self::$view->setFile($path);
-			
-			$layout = self::$defaultLayout;
-			
-			if(isset(self::$layouts[$view][$action]))
-				$layout = self::$layouts[$view][$action];
-			
-			self::$view->setLayout($layout);
-			
-			foreach(self::$viewDecorators as $event => $decorators)
-				foreach($decorators as $decorator)
-					self::$view->addDecorator($event, $decorator);
-					
-			if(count(self::$css[$view][$action])) foreach(self::$css[$view][$action] as $css)
-				self::$view->addCSS($css);
-		}
-		
-		public static function registerController($controller, $action)
-		{
-			$path = realpath(str_replace("/", DIRECTORY_SEPARATOR, dirname(__FILE__) . "/../../app/controllers/$controller.php"));
+			$path = realpath(str_replace("/", DIRECTORY_SEPARATOR, CONTROLLERS_DIR . "/$controller.php"));
 			if(is_file($path))
 			{
 				$className = ucwords($controller) . "Controller";
 				require_once($path);
-				self::$controller = new $className($action);
+				$controller = new $className($action, $params);
 			}
-			else self::$controller = new Controller($action);
+			else echo "No tengo ese controller, melón!";
 			
-			if(self::$controller->autoRender)
-				self::$controller->render();
+			if($controller->parameters->autoRender)
+				$controller->render();
 		}
 		
 		public static function addLayout($view, $action, $layout)
@@ -82,18 +49,6 @@
 		public static function addViewDecorator($event, Decorator $decorator)
 		{
 			self::$viewDecorators[$event][$decorator->getId()] = $decorator;
-		}
-		
-		public static function sanitizePath($path)
-		{
-			return realpath(str_replace("/", DIRECTORY_SEPARATOR, $path));
-		}
-		
-		protected static function registerRoute()
-		{
-			self::registerModel(Router::getRoute());
-			self::registerView(Router::getRoute(), Router::getAction());
-			self::registerController(Router::getRoute(), Router::getAction());
 		}
 		
 		protected static function bootstrap()

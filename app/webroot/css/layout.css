@@ -1,15 +1,34 @@
 
+	html * {
+		list-style: 	none;
+		padding:		0;
+		margin:			0;
+		font-size: 		1em;		
+	}
+
 	body {
 		font-family: 	"Lucida Grande";
 		background: 	#eee;
+		color: 			#444;
 	}
 	
 	#wrapper {
-		width:			700px;
-		margin:			0 auto;
+		width:			1000px;
+		margin:			20px auto;
 		background: 	white;
 		font-size: 		80%;
 		color: 			#333;
+		padding:		10px;
+	}
+	
+	#header {
+		background: 	orange;
+		font-size: 		2em;
+		color: 			white;
+		font-family: 	Georgia;
+		padding:		20px 15px 50px;
+		margin-bottom: 	20px;
+		
 	}
 	
 	#leftMenu {
@@ -17,6 +36,25 @@
 		width:			150px;
 	}
 	
+	#leftMenu ul {
+		list-style: 	none;
+	}
+	
+	#leftMenu ul a {
+	
+	}
+	
 	#content {
 		margin-left: 	150px;
+	}
+	
+	h1 {
+		font-family: 	"Arial";
+		font-weight:	bold;
+		font-size: 		2em;
+	}
+	
+	p {
+		font-family: 	"Georgia";
+		margin:			10px 0 10px;
 	}

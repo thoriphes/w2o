@@ -56,25 +56,62 @@
 				return $this->createTable($table);
 		}
 		
+		public function retrieveRow($tableName, $fields = "*", $condition = 1, $limit = "")
+		{
+			if(is_array($fields))
+				$fields = implode(", ", $fields);
+				
+			if(is_array($condition))
+			{
+				foreach($condition as $label => &$value)
+					$value = "`$label`='$value'";
+				$condition = implode(", ", $condition);
+			}
+				
+			$query = "SELECT SQL_CALC_FOUND_ROWS $fields FROM `$tableName` WHERE $condition $limit";
+			
+			return $this->engine->query($query);
+		}
+		
 		public function insertRow($tableName, array $row)
 		{
 			$insert = array();
 			
 			foreach ($row as $field => $value)
+			{
+				if(!$this->magicQuotesOn()) $value = addslashes($value);				
 				$insert["`$field`"] = "'$value'";
+			}
 			
 			$fieldsList = implode(", ", array_keys($insert));
 			$valuesList = implode(", ", array_values($insert));
-			return $this->engine->query("INSERT INTO `$tableName` ($fieldsList) VALUES ($valuesList)");
+			
+			$query = "INSERT INTO `$tableName` ($fieldsList) VALUES ($valuesList)";
+			
+			return $this->engine->query($query);
 		}
 		
 		public function modifyRow($tableName, array $row, $condition)
 		{
 			foreach ($row as $field => &$value)
+			{
+				if(!$this->magicQuotesOn()) $value = addslashes($value);
 				$value = "`$field`='$value'";
+			}
 
 			$valuesList = implode(", ", array_values($row));
-			return $this->engine->query("UPDATE `$tableName` SET $valuesList WHERE $condition");
+			$query = "UPDATE `$tableName` SET $valuesList WHERE $condition";
+			return $this->engine->query($query);
+		}
+		
+		public function deleteRow($tableName, $condition)
+		{
+			return $this->engine->query("DELETE FROM `$tableName` WHERE $condition");
+		}
+		
+		protected function magicQuotesOn()
+		{
+			return (function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc())    || (ini_get('magic_quotes_sybase') && (strtolower(ini_get('magic_quotes_sybase'))!="off")); 
 		}
 	}
 

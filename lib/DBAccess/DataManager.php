@@ -101,6 +101,11 @@
 			return self::$dbManagers[self::$currentManager]->alterTable($table);
 		}
 		
+		public function retrieveRow($tableName, $fields = "*", $condition = 1, $limit = "")
+		{
+			return self::$dbManagers[self::$currentManager]->retrieveRow($tableName, $fields, $condition, $limit);
+		}
+		
 		public function insertRow($tableName, array $row)
 		{
 			return self::$dbManagers[self::$currentManager]->insertRow($tableName, $row);
@@ -108,7 +113,12 @@
 		
 		public function modifyRow($tableName, array $row, $condition)
 		{
-			return self::$dbManagers[self::$currentManager]->insertRow($tableName, $row, $condition);
+			return self::$dbManagers[self::$currentManager]->modifyRow($tableName, $row, $condition);
+		}
+		
+		public function deleteRow($tableName, $condition)
+		{
+			return self::$dbManagers[self::$currentManager]->deleteRow($tableName, $condition);
 		}
 		
 		private function getEngineType($type)
@@ -125,6 +135,7 @@
 		{
 			self::$dbManagers[self::$currentManager]->remove($event, $decorator);
 		}
+		
 	}
 
 ?>

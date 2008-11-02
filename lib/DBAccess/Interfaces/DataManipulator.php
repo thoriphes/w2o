@@ -10,6 +10,8 @@
 	 */
 	interface DataManipulator
 	{
+		public function retrieveRow($tableName, $fields = "*", $condition = 1, $limit = "");
+		
 		/**
 		 * Inserts a row in the specified table. $row is expected to be a hash map
 		 * with FIELDS => VALUES.
@@ -28,6 +30,8 @@
 		 * @param string $condition
 		 */
 		public function modifyRow($tableName, array $row, $condition);
+		
+		public function deleteRow($tableName, $condition);
 	}
 
 ?>

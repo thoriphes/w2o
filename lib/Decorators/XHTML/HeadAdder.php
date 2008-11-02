@@ -22,17 +22,6 @@
 				$this->params['description']
 			);
 		}
-		
-		/*public function setParams(array $params)
-		{
-			foreach ($params as $key => &$value)
-			{
-				if(is_array($value))
-					$value = implode(" ", $value);
-			}
-			
-			$this->params = $params;
-		}*/
 	}
 
 ?>

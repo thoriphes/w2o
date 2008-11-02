@@ -2,6 +2,8 @@
 
 	abstract class Decorator {
 		
+		const DATA_MARKER = "{{DATA}}";
+		
 		protected $id;
 		protected $params = array();
 		
@@ -15,7 +17,7 @@
 			$this->params = $params;
 		}
 		
-		public abstract function run($data = null);
+		public abstract function run(&$data = null);
 		
 	}
 

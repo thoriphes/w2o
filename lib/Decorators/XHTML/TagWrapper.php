@@ -13,17 +13,17 @@
 			$this->addDecorator("run", new TagCloser($tagName));
 		}
 		
-		public function run($data = null)
+		public function run(&$data = null)
 		{
 			return $this->fireEvent("run", $data);
 		}
 		
-		public function fireEvent($event, $data = null)
+		public function fireEvent($event, &$data = null)
 		{
-			$result = $data;
-			foreach ($this->decorators[$event] as $decorator)
-				$result = $decorator->run($result);
-			return $result;			
+			if(count($this->decorators[$event])) 
+				foreach($this->decorators[$event] as $decorator)
+					$decorator->run($data);	
+			return $data;	
 		}
 		
 		public function addDecorator($event, Decorator $decorator)

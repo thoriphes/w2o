@@ -2,12 +2,12 @@
 
 	abstract class BottomDataAddition extends Decorator
 	{
-		public function run($data = null) 
+		public function run(&$data = null) 
 		{
-			return $data . $this->generateData();
+			$data .= $this->generateData();
 		}
 		
-		protected abstract function generateData();
+		protected abstract function generateData($data = null);
 	}
 
 ?>

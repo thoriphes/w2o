@@ -2,12 +2,12 @@
 
 	abstract class TopDataAddition extends Decorator
 	{
-		public function run($data = null) 
+		public function run(&$data = null) 
 		{
-			return $this->generateData() . $data;
+			$data = $this->generateData($data) . $data;
 		}
 		
-		protected abstract function generateData();
+		protected abstract function generateData($data = null);
 	}
 
 ?>

@@ -2,9 +2,9 @@
 
 	class StripTags extends Decorator
 	{
-		public function run($data = null)
+		public function run(&$data = null)
 		{
-			return strip_tags($data);
+			strip_tags($data);
 		}
 	}
 

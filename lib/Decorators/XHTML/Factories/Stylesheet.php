@@ -7,7 +7,7 @@
 		public static function getXHTML($file, $media = self::DEFAULT_MEDIA)
 		{
 			if($file != "")
-				return "<link rel='stylesheet' type='text/css' media='$media' href='".CSS_URL."$file' />\n";
+				return "<link rel='stylesheet' type='text/css' media='$media' href='". APP_URL . CSS_URL."$file' />\n";
 		}
 	}
 
